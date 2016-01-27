@@ -111,8 +111,8 @@ class Box {
     };
   }
 
-  get bounds () {
-    return { width: this.width, height: this.height };
+  get center () {
+    return { width: this.width / 2, height: this.height / 2 };
   }
 
   draw (ctx, color) {
@@ -130,29 +130,29 @@ class Box {
   odraw (ctx, options) {
     var o = Util.merge(options, this.options);
 
-    console.log(o);
+    var c = this.center;
 
     ctx.save();
     if (o.filled) {
       ctx.fillStyle = o.color;
       ctx.fillRect(
-        this.x - this.width / 2 + o.origin.x,
-        this.y - this.height / 2 + o.origin.y,
+        this.x - c.width + o.origin.x,
+        this.y - c.height + o.origin.y,
         this.width, this.height
       );
     } else {
       ctx.strokeStyle = o.color;
       ctx.strokeRect(
-        this.x - this.width / 2 + o.origin.x,
-        this.y - this.height / 2 + o.origin.y,
+        this.x - c.width + o.origin.x,
+        this.y - c.height + o.origin.y,
         this.width, this.height
       );
     }
     if (o.wireframe.enabled) {
       ctx.strokeStyle = o.wireframe.color;
       ctx.strokeRect(
-        this.x - this.width / 2 + o.origin.x,
-        this.y - this.height / 2 + o.origin.y,
+        this.x - c.width + o.origin.x,
+        this.y - c.height + o.origin.y,
         this.width, this.height
       );
     }
