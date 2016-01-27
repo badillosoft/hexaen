@@ -178,6 +178,31 @@ class Box {
     return { x: this.width / 2, y: this.height / 2 };
   }
 
+  get bounds () {
+    var c = this.center;
+    return  {
+      min: {
+        x: this.x - c.x,
+        y: this.y - c.y
+      },
+      max: {
+        x: this.x + c.x,
+        y: this.y + c.y
+      }
+    }
+  }
+
+  intersects (type, obj) {
+    if (type === 'point') {
+      var x = obj.x, y = obj.y, c = this.center;
+
+      return x >= (this.x - c.x) &&
+        x <= (this.x + c.x) &&
+        y >= (this.y - c.y) &&
+        y <= (this.y + c.y);
+    }
+  }
+
   draw (ctx, color) {
     ctx.save();
     ctx.fillStyle = color || '#F00';
@@ -226,5 +251,94 @@ class Box {
     } else {
       scene.ctx.stroke();
     }
+  }
+}
+
+/****************************************************************/
+/* Board - Clases para tableros                                 */
+/****************************************************************/
+
+class GridBoard {
+  constructor(rows, cols, generator) {
+    this.rows = rows || 2;
+    this.cols = cols || 2;
+    this.cells = [];
+    this.origin = { x: 0, y: 0 };
+    this.bounds = {
+      min: { x: null, y: null },
+      max: { x: null, y: null },
+    }
+
+    for (var row = 0; row < this.rows; row++) {
+      for (var col = 0; col < this.cols; col++) {
+        var obj = generator(row, col);
+        this.cells.push(obj);
+
+        if (this.bounds.min.x === null || this.bounds.min.x > obj.x) {
+          this.bounds.min.x = obj.bounds.min.x;
+        }
+
+        if (this.bounds.min.y === null || this.bounds.min.y > obj.y) {
+          this.bounds.min.y = obj.bounds.min.y;
+        }
+
+        if (this.bounds.max.x === null || this.bounds.max.x < obj.x) {
+          this.bounds.max.x = obj.bounds.max.x;
+        }
+
+        if (this.bounds.max.y === null || this.bounds.max.y < obj.y) {
+          this.bounds.max.y = obj.bounds.max.y;
+        }
+      }
+    }
+
+    console.log(this.bounds);
+  }
+
+  index (row, col) {
+    return this.cols * row + col;
+  }
+
+  row_col (index) {
+    return {
+      row: Math.floor(index / this.cols),
+      col: index % this.cols
+    };
+  }
+
+  getCell (row, col) {
+    return this.cells[this.index(row, col)];
+  }
+
+  setCell (row, col, value) {
+    this.cells[this.index(row, col)] = value;
+  }
+
+  select (point, callback) {
+    var p = {
+      x: point.x - this.origin.x,
+      y: point.y - this.origin.y
+    };
+
+    if (p.x < this.bounds.min.x || p.x > this.bounds.max.x ||
+      p.y < this.bounds.min.y || p.y > this.bounds.max.y) {
+        return;
+    }
+
+    for (var cell of this.cells) {
+      if (cell.intersects ('point', p)) {
+        console.log('inter');
+        callback(cell);
+        return;
+      }
+    };
+  }
+
+  pselect (point, callback) {
+    this.cells.forEach(function (cell) {
+      if (cell.intersects ('point', point)) {
+        callback(cell);
+      }
+    });
   }
 }

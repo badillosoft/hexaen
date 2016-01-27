@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "Se agrego el metodo estatico squareGrid a Box"
+git commit -m "Se agrego la clase GridBoard y algunos metodos de seleccion"
 
 git push -u origin master
