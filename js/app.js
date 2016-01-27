@@ -13,7 +13,12 @@ window.onload = function () {
       o.x = x;
       o.y = y;
       console.log(o);
-      o.draw(scene.ctx, '#0F0');
+      o.odraw(scene.ctx, {
+        filled: ((x + y) / 100) % 2 === 1,
+        wireframe: {
+          enabled: true
+        }
+      });
     }
   }
 };

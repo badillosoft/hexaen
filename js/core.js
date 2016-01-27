@@ -2,6 +2,27 @@
 /* Util - Clases útiles                                         */
 /****************************************************************/
 
+class Util {
+  static merge (o1, o2) {
+    if (o1 === null || o1 === undefined) {
+      return o2;
+    } else if (o2 === null || o2 === undefined) {
+      return o1;
+    }
+
+    var o = {};
+    for (var k in o2) {
+      if (typeof o1[k] === 'object' || typeof o2[k] === 'object') {
+        o[k] = merge(o1[k], o2[k]);
+        continue;
+      }
+      o[k] = o1[k] !== undefined ? o1[k] : o2[k];
+    }
+
+    return o;
+  }
+}
+
 class Scene {
   constructor (canvasId) {
     this.canvas = document.getElementById(canvasId);;
@@ -78,6 +99,16 @@ class Box {
     this.height = h || 10;
     this.x = x || 0;
     this.y = y || 0;
+
+    this.options = {
+      filled: true,
+      color: '#00F',
+      wireframe: {
+        color: '#F0F',
+        enabled: false
+      },
+      origin: { x: 0, y: 0 }
+    };
   }
 
   get bounds () {
@@ -94,5 +125,43 @@ class Box {
     );
     ctx.restore();
     scene.ctx.fill();
+  }
+
+  odraw (ctx, options) {
+    var o = Util.merge(options, this.options);
+
+    console.log(o);
+
+    ctx.save();
+    if (o.filled) {
+      ctx.fillStyle = o.color;
+      ctx.fillRect(
+        this.x - this.width / 2 + o.origin.x,
+        this.y - this.height / 2 + o.origin.y,
+        this.width, this.height
+      );
+    } else {
+      ctx.strokeStyle = o.color;
+      ctx.strokeRect(
+        this.x - this.width / 2 + o.origin.x,
+        this.y - this.height / 2 + o.origin.y,
+        this.width, this.height
+      );
+    }
+    if (o.wireframe.enabled) {
+      ctx.strokeStyle = o.wireframe.color;
+      ctx.strokeRect(
+        this.x - this.width / 2 + o.origin.x,
+        this.y - this.height / 2 + o.origin.y,
+        this.width, this.height
+      );
+    }
+    ctx.restore();
+
+    if (o.filled) {
+      scene.ctx.fill();
+    } else {
+      scene.ctx.stroke();
+    }
   }
 }
