@@ -1,11 +1,8 @@
-var canvas = null,
-  ctx = null;
+var scene = null;
 
 window.onload = function () {
-  canvas = document.getElementById('canvas');
-  ctx = canvas.getContext('2d');
+  scene = new Scene('canvas');
 
-  ctx.fillStyle = '#777';
-
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  scene.fullScreen();
+  scene.clear();
 };
