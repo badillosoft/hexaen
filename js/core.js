@@ -27,6 +27,10 @@ class Scene {
   constructor (canvasId) {
     this.canvas = document.getElementById(canvasId);;
     this.ctx = canvas.getContext('2d');
+
+    this.options = {
+      color: '#333'
+    };
   }
 
   get width () { return this.canvas.width; }
@@ -47,6 +51,19 @@ class Scene {
   clear (color) {
     this.ctx.fillStyle = color || '#777';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  draw (callback) {
+    this.ondraw(callback);
+  }
+
+  ondraw (callback) {
+    this.clear(this.options.color);
+    callback(this.ctx, this);
+    var self = this;
+    requestAnimationFrame (function () {
+      self.ondraw(callback);
+    });
   }
 }
 
