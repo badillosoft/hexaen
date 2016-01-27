@@ -7,12 +7,28 @@ window.onload = function () {
 
   var box = new Box(0, 100);
 
+  var boxes = [];
+
+  scene.mousemove(function (x, y) {
+    box.x = x;
+    box.y = y;
+  });
+
+  scene.touch (function (x, y) {
+    boxes.push(new Box(x, y));
+  });
+
   scene.update (function () {
-    box.x = box.x > scene.width ? 0 : box.x + 10;
+    for (var b of boxes) {
+      b.x = b.x > scene.width ? 0 : b.x + 10;
+    }
   });
 
   scene.draw (function (ctx) {
     box.draw(ctx);
+    for (var b of boxes) {
+      b.draw(ctx, '#00F');
+    }
   });
 
 };

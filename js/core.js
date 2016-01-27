@@ -53,24 +53,38 @@ class Scene {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  draw (callback) { this.ondraw(callback); }
-
-  ondraw (callback) {
+  draw (callback) {
     this.clear(this.options.color);
     callback(this.ctx, this);
     var self = this;
     requestAnimationFrame (function () {
-      self.ondraw(callback);
+      self.draw(callback);
     });
   }
 
-  update (callback) { this.onupdate(callback); }
-
-  onupdate (callback) {
+  update (callback) {
     callback(this);
     var self = this;
     requestAnimationFrame (function () {
-      self.onupdate(callback);
+      self.update(callback);
+    });
+  }
+
+  mousemove (callback) {
+    window.addEventListener('mousemove', function (e) {
+      callback(e.x, e.y);
+    });
+  }
+
+  touch (callback) {
+    window.addEventListener('mousedown', function (e) {
+      callback(e.x, e.y, e.button);
+    });
+  }
+
+  on (name, callback) {
+    window.addEventListener(name, function (e) {
+      callback(e);
     });
   }
 }
