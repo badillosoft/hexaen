@@ -40,7 +40,7 @@ class Scene {
   set height (value) { this.canvas.height = value; }
 
   get center () {
-    return { width: this.width / 2, height: this.height / 2 };
+    return { x: this.width / 2, y: this.height / 2 };
   }
 
   fullScreen () {
@@ -133,6 +133,30 @@ class Point {
 }
 
 class Box {
+  static squareGrid (num, unit, distance, center) {
+    var n = num || 2,
+      u = unit || 10,
+      d = distance || 10,
+      c = center || { x: 0, y: 0 },
+      boxes = [];
+
+    var l = u + d;
+
+    for (var y = 0; y < n; y++) {
+      for (var x = 0; x < n; x++) {
+        boxes.push(
+          new Box(
+            x * l + c.x - l * (n / 2),
+            y * l + c.y - l * (n / 2),
+            u, u
+          )
+        );
+      }
+    }
+
+    return boxes;
+  }
+
   constructor(x, y, w, h) {
     this.width = w || 10;
     this.height = h || 10;
@@ -151,7 +175,7 @@ class Box {
   }
 
   get center () {
-    return { width: this.width / 2, height: this.height / 2 };
+    return { x: this.width / 2, y: this.height / 2 };
   }
 
   draw (ctx, color) {
@@ -175,23 +199,23 @@ class Box {
     if (o.filled) {
       ctx.fillStyle = o.color;
       ctx.fillRect(
-        this.x - c.width + o.origin.x,
-        this.y - c.height + o.origin.y,
+        this.x - c.x + o.origin.x,
+        this.y - c.y + o.origin.y,
         this.width, this.height
       );
     } else {
       ctx.strokeStyle = o.color;
       ctx.strokeRect(
-        this.x - c.width + o.origin.x,
-        this.y - c.height + o.origin.y,
+        this.x - c.x + o.origin.x,
+        this.y - c.y + o.origin.y,
         this.width, this.height
       );
     }
     if (o.wireframe.enabled) {
       ctx.strokeStyle = o.wireframe.color;
       ctx.strokeRect(
-        this.x - c.width + o.origin.x,
-        this.y - c.height + o.origin.y,
+        this.x - c.x + o.origin.x,
+        this.y - c.y + o.origin.y,
         this.width, this.height
       );
     }
