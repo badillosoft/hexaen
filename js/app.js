@@ -7,13 +7,12 @@ window.onload = function () {
 
   var box = new Box(0, 100);
 
-  scene.draw (function (ctx) {
-    box.x += 10;
-    box.draw(ctx);
+  scene.update (function () {
+    box.x = box.x > scene.width ? 0 : box.x + 10;
+  });
 
-    if (box.x > scene.width) {
-      box.x = 0;
-    }
+  scene.draw (function (ctx) {
+    box.draw(ctx);
   });
 
 };

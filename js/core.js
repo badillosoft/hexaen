@@ -53,9 +53,7 @@ class Scene {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  draw (callback) {
-    this.ondraw(callback);
-  }
+  draw (callback) { this.ondraw(callback); }
 
   ondraw (callback) {
     this.clear(this.options.color);
@@ -63,6 +61,16 @@ class Scene {
     var self = this;
     requestAnimationFrame (function () {
       self.ondraw(callback);
+    });
+  }
+
+  update (callback) { this.onupdate(callback); }
+
+  onupdate (callback) {
+    callback(this);
+    var self = this;
+    requestAnimationFrame (function () {
+      self.onupdate(callback);
     });
   }
 }
