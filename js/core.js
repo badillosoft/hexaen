@@ -342,3 +342,64 @@ class GridBoard {
     });
   }
 }
+
+class Hex {
+  constructor (radius, flower, land, world, space) {
+    this.radius = radius || 10;
+    this.index = {
+      flower: flower || 0,
+      land: land || 0,
+      world: world || 0,
+      space: space || 0,
+    };
+
+    this.ox = 0;
+    this.oy = 0;
+
+    if (this.index.flower > 0) {
+      var t = (this.index.flower * Math.PI) / 3.0,
+        d = Math.PI / 3.0;
+
+      this.ox = this.radius * (Math.cos(t) + Math.cos(t - d));
+      this.oy = this.radius * (Math.sin(t) + Math.sin(t - d));
+    }
+
+    this.compute(this.radius);
+  }
+
+  compute (radius) {
+    this.points = [];
+    for (var i = 0; i < 6; i++) {
+      this.points.push({
+        x: this.ox + radius * Math.cos((i * 2.0 * Math.PI) / 6.0),
+        y: this.oy + radius * Math.sin((i * 2.0 * Math.PI) / 6.0)
+      });
+    }
+  }
+
+  draw (ctx, color, origin) {
+    var ox = 0, oy = 0;
+
+    if (origin) {
+      ox = origin.x || 0;
+      oy = origin.y || 0;
+    }
+
+    ctx.save();
+    ctx.strokeStyle = color || '#F00';
+    //ctx.lineWidth = 5;
+    ctx.beginPath();
+    var first = true;
+    for (var p of this.points) {
+      if (first) {
+        first = false;
+        ctx.moveTo(p.x + ox, p.y + oy);
+      } else {
+        ctx.lineTo(p.x + ox, p.y + oy);
+      }
+    }
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
+}

@@ -5,37 +5,18 @@ window.onload = function () {
 
   scene.fullScreen();
 
-  var box = new Box(0, 100);
+  var hexs = [];
 
-  var board = new GridBoard(40, 25, function (row, col) {
-    return new Box(row * 10, col * 10, 8, 8);
-  });
-
-  var c = scene.center;
-  c.x -= 50 * 4;
-  c.y -= 50 * 2.5;
-
-  board.origin = c;
-
-  scene.mousemove (function (x, y) {
-    box.x = x;
-    box.y = y;
-
-    board.select({ x: x, y: y }, function (b) {
-      b.options.color = '#FF0';
-    });
-  });
-
-  scene.touch (function (x, y) {
-
-  });
+  for (var i = 0; i <= 6; i++) {
+    hexs.push(new Hex(20, i));
+    hexs[i].compute(16);
+  }
 
   scene.draw (function (ctx) {
-    box.draw(ctx);
-    for (var b of board.cells) {
-      b.odraw(ctx, {
-        origin: c
-      });
+    var k = 0;
+    for (var hex of hexs) {
+      hex.draw(ctx, '#F0' + k, scene.center);
+      k += 1;
     }
   });
 
