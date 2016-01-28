@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "Se implemento el metodo odraw en Hex"
+git commit -m "Se implemento el metodo land en Hex"
 
 git push -u origin master

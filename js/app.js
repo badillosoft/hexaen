@@ -7,18 +7,22 @@ window.onload = function () {
 
   var hexs = [];
 
-  for (var i = 0; i <= 6; i++) {
-    var hex = new Hex(30, 40, i);
+  for (var l = 0; l <= 6; l++) {
+    var color = Color.random;
+    for (var f = 0; f <= 6; f++) {
+      var hex = new Hex(16, 20, f, l);
 
-    hex.options.origin = scene.center;
+      hex.options.origin = scene.center;
+      hex.options.color = color;
 
-    hexs.push(hex);
+      hexs.push(hex);
+    }
   }
 
-  scene.draw (function (ctx) {
-    for (var hex of hexs) {
-      hex.odraw(ctx);
-    }
-  });
+  scene.clear('#333');
+
+  for (var hex of hexs) {
+    hex.odraw(scene.ctx);
+  }
 
 };

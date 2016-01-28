@@ -398,7 +398,13 @@ class Hex {
   static land(r, l, c) {
     if (!l || l <= 0) { return c || { x: 0, y: 0 }; }
 
-    return { x: 0, y: 0 };
+    var t = (l * Math.PI) / 3.0,
+      d = Math.PI / 3.0;
+
+    return {
+      x: c.x + r * (4 * Math.cos(t) + Math.cos(t - d)),
+      y: c.y + r * (4 * Math.sin(t) + Math.sin(t - d))
+    };
   }
 
   static world(r, w, c) {
