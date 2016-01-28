@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "Se implemento el metodo world en Hex"
+git commit -m "Se implemento el metodo space en Hex"
 
 git push -u origin master

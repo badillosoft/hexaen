@@ -422,7 +422,13 @@ class Hex {
   static space(r, s, c) {
     if (!s || s <= 0) { return c || { x: 0, y: 0 }; }
 
-    return { x: 0, y: 0 };
+    var t = (s * Math.PI) / 3.0,
+      d = Math.PI / 3.0;
+
+    return {
+      x: c.x + r * (28 * Math.cos(t) + 7 * Math.cos(t - d)),
+      y: c.y + r * (28 * Math.sin(t) + 7 * Math.sin(t - d))
+    };
   }
 
   static compute (r, o) {
