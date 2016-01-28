@@ -21,6 +21,45 @@ class Util {
 
     return o;
   }
+
+  static decToHex (d) {
+    if (d < 16) {
+      return '0123456789abcdef'[d];
+    }
+
+    var s = '';
+
+    while (d > 0) {
+      s = decToHex((d % 16)) + s;
+      d = Math.floor(d / 16);
+    }
+
+    return s;
+  }
+
+  static decToHexFix(d, n) {
+    return Util.intFix(Util.decToHex(d), n);
+  }
+
+  static intFix(s, n) {
+    while (s.length < n) { s = '0' + s; }
+    return s;
+  }
+}
+
+class Color {
+  static get random () {
+    var r = Math.floor((Math.random() * 255)),
+      g = Math.floor((Math.random() * 255)),
+      b = Math.floor((Math.random() * 255));
+    return Color.from_rgb(r, g, b);
+  }
+
+  static from_rgb (r, g, b) {
+    return '#' + Util.decToHexFix(r, 2) +
+      Util.decToHexFix(g, 2) +
+      Util.decToHexFix(b, 2);
+  }
 }
 
 class Scene {
@@ -345,9 +384,7 @@ class GridBoard {
 
 class Hex {
   static flower(r, f) {
-    if (!f || f <= 0) {
-      return { x: 0, y: 0 };
-    }
+    if (!f || f <= 0) { return { x: 0, y: 0 }; }
 
     var t = (f * Math.PI) / 3.0,
       d = Math.PI / 3.0;
@@ -356,6 +393,24 @@ class Hex {
       x: r * (Math.cos(t) + Math.cos(t - d)),
       y: r * (Math.sin(t) + Math.sin(t - d))
     };
+  }
+
+  static land(r, l, c) {
+    if (!l || l <= 0) { return c || { x: 0, y: 0 }; }
+
+    return { x: 0, y: 0 };
+  }
+
+  static world(r, w, c) {
+    if (!w || w <= 0) { return c || { x: 0, y: 0 }; }
+
+    return { x: 0, y: 0 };
+  }
+
+  static space(r, s, c) {
+    if (!s || s <= 0) { return c || { x: 0, y: 0 }; }
+
+    return { x: 0, y: 0 };
   }
 
   static compute (r, o) {
@@ -383,7 +438,10 @@ class Hex {
       space: space || 0,
     };
 
-    this.center = Hex.flower(this.out_radius, this.index.flower);
+    this.center = Hex.flower(this.out_radius, flower);
+    this.center = Hex.land(this.out_radius, land, this.center);
+    this.center = Hex.world(this.out_radius, world, this.center);
+    this.center = Hex.space(this.out_radius, space, this.center);
 
     this.points = Hex.compute(this.in_radius, this.center);
   }

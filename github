@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "Se organizo la clase Hex de una manera mas coherente"
+git commit -m "Se agrego la clase Color y algunos metodos utiles"
 
 git push -u origin master
