@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "Se agrego la clase GridBoard y algunos metodos de seleccion"
+git commit -m "Se creo la clase Hex"
 
 git push -u origin master
