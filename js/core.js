@@ -444,6 +444,16 @@ class Hex {
     this.center = Hex.space(this.out_radius, space, this.center);
 
     this.points = Hex.compute(this.in_radius, this.center);
+
+    this.options = {
+      filled: true,
+      color: Color.random,
+      wireframe: {
+        color: Color.random,
+        enabled: false
+      },
+      origin: { x: 0, y: 0 }
+    };
   }
 
   draw (ctx, color, origin) {
@@ -469,6 +479,59 @@ class Hex {
     }
     ctx.closePath();
     ctx.stroke();
+    ctx.restore();
+  }
+
+  odraw (ctx, options) {
+    var o = Util.merge(options, this.options);
+
+    var ox = o.origin.x, oy = o.origin.y;
+
+    ctx.save();
+    if (o.filled) {
+      ctx.fillStyle = o.color;
+      ctx.beginPath();
+      var first = true;
+      for (var p of this.points) {
+        if (first) {
+          first = false;
+          ctx.moveTo(p.x + ox, p.y + oy);
+        } else {
+          ctx.lineTo(p.x + ox, p.y + oy);
+        }
+      }
+      ctx.closePath();
+      scene.ctx.fill();
+    } else {
+      ctx.strokeStyle = o.color;
+      ctx.beginPath();
+      var first = true;
+      for (var p of this.points) {
+        if (first) {
+          first = false;
+          ctx.moveTo(p.x + ox, p.y + oy);
+        } else {
+          ctx.lineTo(p.x + ox, p.y + oy);
+        }
+      }
+      ctx.closePath();
+      scene.ctx.stroke();
+    }
+    if (o.wireframe.enabled) {
+      ctx.strokeStyle = o.wireframe.color;
+      ctx.beginPath();
+      var first = true;
+      for (var p of this.points) {
+        if (first) {
+          first = false;
+          ctx.moveTo(p.x + ox, p.y + oy);
+        } else {
+          ctx.lineTo(p.x + ox, p.y + oy);
+        }
+      }
+      ctx.closePath();
+      scene.ctx.stroke();
+    }
     ctx.restore();
   }
 }
