@@ -410,7 +410,13 @@ class Hex {
   static world(r, w, c) {
     if (!w || w <= 0) { return c || { x: 0, y: 0 }; }
 
-    return { x: 0, y: 0 };
+    var t = (w * Math.PI) / 3.0,
+      d = Math.PI / 3.0;
+
+    return {
+      x: c.x + r * (7 * Math.cos(t) + 7 * Math.cos(t - d)),
+      y: c.y + r * (7 * Math.sin(t) + 7 * Math.sin(t - d))
+    };
   }
 
   static space(r, s, c) {
