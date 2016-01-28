@@ -373,8 +373,9 @@ class Hex {
     return points;
   }
 
-  constructor (radius, flower, land, world, space) {
-    this.radius = radius || 10;
+  constructor (in_radius, out_radius, flower, land, world, space) {
+    this.in_radius = in_radius || 10;
+    this.out_radius = out_radius || 10;
     this.index = {
       flower: flower || 0,
       land: land || 0,
@@ -382,13 +383,9 @@ class Hex {
       space: space || 0,
     };
 
-    this.center = Hex.flower(radius, flower);
+    this.center = Hex.flower(this.out_radius, this.index.flower);
 
-    this.points = Hex.compute(this.radius, this.center);
-  }
-
-  compute (radius) {
-    this.points = Hex.compute(16, this.center);
+    this.points = Hex.compute(this.in_radius, this.center);
   }
 
   draw (ctx, color, origin) {

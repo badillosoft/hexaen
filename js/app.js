@@ -8,9 +8,7 @@ window.onload = function () {
   var hexs = [];
 
   for (var i = 0; i <= 6; i++) {
-    var hex = new Hex(20, i);
-
-    hex.compute(16);
+    var hex = new Hex(16, 20, i);
 
     hexs.push(hex);
   }
