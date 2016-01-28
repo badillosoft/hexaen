@@ -7,7 +7,7 @@ window.onload = function () {
 
   var hexs = [];
 
-  for (var s = 0; s <= 6; s++) {
+  for (var s = 0; s <= 0; s++) {
     var scolor = Color.random;
     for (var w = 0; w <= 6; w++) {
       var wcolor = Color.random;
@@ -26,10 +26,38 @@ window.onload = function () {
     }
   }
 
+  var controller = new SceneController(scene);
+
+  // scene.ctx.translate(-scene.center.x, -scene.center.y);
+  // scene.ctx.scale(3, 3);
+
   scene.clear('#333');
 
   for (var hex of hexs) {
     hex.odraw(scene.ctx);
   }
+
+  controller.run(function (ctx) {
+    scene.clear('#333');
+
+    for (var hex of hexs) {
+      hex.odraw(ctx);
+    }
+  });
+
+  var sx = 1, sy = 1;
+
+  scene.touch(function () {
+    scene.ctx.translate(-scene.center.x, -scene.center.y);
+    sx += 0.5 / (sx * sx);
+    sy += 0.5 / (sy * sy);
+    scene.ctx.scale(sx, sy);
+
+    scene.clear('#333');
+
+    for (var hex of hexs) {
+      hex.odraw(scene.ctx);
+    }
+  });
 
 };

@@ -128,6 +128,30 @@ class Scene {
   }
 }
 
+class SceneController {
+  constructor(scene) {
+    this.scene = scene;
+  }
+
+  run (callback) {
+    var self = this;
+    this.scene.mousemove(function (x, y) {
+      self.mousemove(x, y, callback);
+    });
+  }
+
+  mousemove (x, y, callback) {
+    var c = this.scene.center;
+    var dx = x - c.x, dy = y - c.y;
+
+    var r = Math.sqrt(dx * dx + dy * dy);
+
+    this.scene.ctx.translate(-dx / 300, - dy / 300);
+
+    callback (this.scene.ctx, this.scene);
+  }
+}
+
 class Node {
   constructor(value) {
     this.value = value || null;
