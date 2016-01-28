@@ -344,6 +344,35 @@ class GridBoard {
 }
 
 class Hex {
+  static flower(r, f) {
+    if (!f || f <= 0) {
+      return { x: 0, y: 0 };
+    }
+
+    var t = (f * Math.PI) / 3.0,
+      d = Math.PI / 3.0;
+
+    return {
+      x: r * (Math.cos(t) + Math.cos(t - d)),
+      y: r * (Math.sin(t) + Math.sin(t - d))
+    };
+  }
+
+  static compute (r, o) {
+    var ox = o ? o.x || 0 : 0,
+      oy = o ? o.y|| 0 : 0;
+
+    var points = [];
+    for (var i = 0; i < 6; i++) {
+      points.push({
+        x: ox + r * Math.cos((i * Math.PI) / 3.0),
+        y: oy + r * Math.sin((i * Math.PI) / 3.0)
+      });
+    }
+
+    return points;
+  }
+
   constructor (radius, flower, land, world, space) {
     this.radius = radius || 10;
     this.index = {
@@ -353,28 +382,13 @@ class Hex {
       space: space || 0,
     };
 
-    this.ox = 0;
-    this.oy = 0;
+    this.center = Hex.flower(radius, flower);
 
-    if (this.index.flower > 0) {
-      var t = (this.index.flower * Math.PI) / 3.0,
-        d = Math.PI / 3.0;
-
-      this.ox = this.radius * (Math.cos(t) + Math.cos(t - d));
-      this.oy = this.radius * (Math.sin(t) + Math.sin(t - d));
-    }
-
-    this.compute(this.radius);
+    this.points = Hex.compute(this.radius, this.center);
   }
 
   compute (radius) {
-    this.points = [];
-    for (var i = 0; i < 6; i++) {
-      this.points.push({
-        x: this.ox + radius * Math.cos((i * 2.0 * Math.PI) / 6.0),
-        y: this.oy + radius * Math.sin((i * 2.0 * Math.PI) / 6.0)
-      });
-    }
+    this.points = Hex.compute(16, this.center);
   }
 
   draw (ctx, color, origin) {

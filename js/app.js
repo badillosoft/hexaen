@@ -8,8 +8,11 @@ window.onload = function () {
   var hexs = [];
 
   for (var i = 0; i <= 6; i++) {
-    hexs.push(new Hex(20, i));
-    hexs[i].compute(16);
+    var hex = new Hex(20, i);
+
+    hex.compute(16);
+
+    hexs.push(hex);
   }
 
   scene.draw (function (ctx) {
